@@ -172,4 +172,6 @@ def test_wrong_piece_counts_are_rejected() -> None:
 
 def test_malformed_body_is_rejected() -> None:
     response = client.post("/evaluate_board_state", json={"board": "nope"})
-    assert response.status_code == 422
+    assert response.status_code == 400
+    assert response.json()["valid"] is False
+    assert response.json()["error"].startswith("malformed request: board:")
