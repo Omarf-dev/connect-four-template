@@ -36,7 +36,7 @@ def validate_board(board: list[list[int]]) -> str | None:
 
     for c in range(COLS):
         seen_empty = False
-        for r in range(ROWS): 
+        for r in range(ROWS -1, -1, -1): 
             if board[r][c] == EMPTY:
                 seen_empty = True
             elif seen_empty:
