@@ -11,7 +11,7 @@ export interface EvaluateResponse {
 }
 
 const API_URL = "http://127.0.0.1:8080/evaluate_board_state";
-export async function evaluateBoar(board: Board): Promise<EvaluateResponse> {
+export async function evaluateBoard(board: Board): Promise<EvaluateResponse> {
     try {
         const res = await fetch(API_URL, {
             method: "POST",
