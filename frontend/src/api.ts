@@ -10,7 +10,8 @@ export interface EvaluateResponse {
     error?: string; 
 }
 
-const API_URL = "http://127.0.0.1:8080/evaluate_board_state";
+// Relative URL: the Vite dev server proxies it to the backend (see vite.config.ts).
+const API_URL = "/evaluate_board_state";
 export async function evaluateBoard(board: Board): Promise<EvaluateResponse> {
     try {
         const res = await fetch(API_URL, {

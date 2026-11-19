@@ -29,6 +29,8 @@ export default function BoardComp({ board, winningCells, disabled, onColumnClick
             {Array.from({length: board[0].length }, (_, c) => (
                 <div
                     key={c}
+                    role="button"
+                    aria-label={`Drop in column ${c + 1}`}
                     onClick={() => !disabled && onColumnClick(c)}
                     style={{
                         display: "flex",
