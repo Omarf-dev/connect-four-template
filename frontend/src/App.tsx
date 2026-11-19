@@ -1,4 +1,5 @@
 import { useRef, useState } from "react";
+import "./App.css";
 import BoardComp from "./components/Board";
 import {
   evaluateBoard,
@@ -16,6 +17,8 @@ const NAMES: Record<number, string> = { 1: "BLUE", 2: "RED" };
 export default function App() {
   const [board, setBoard] = useState<BoardType>(emptyBoard);
   const [result, setResult] = useState<EvaluateResponse | null>(null);
+  const [lastMove, setLastMove] = useState<[number, number] | null>(null);
+  const [hoverCol, setHoverCol] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   // A ref, not state: a second click in the same tick must see the lock at once.
@@ -52,6 +55,7 @@ export default function App() {
     if (res.valid) {
       setBoard(next);
       setResult(res);
+      setLastMove([row, col]);
       setError(null);
     } else {
       setError(res.error ?? "Invalid move");
@@ -62,6 +66,7 @@ export default function App() {
     gameId.current += 1;
     setBoard(emptyBoard());
     setResult(null);
+    setLastMove(null);
     setError(null);
   }
 
@@ -71,21 +76,40 @@ export default function App() {
   } else if (result?.status === "draw") {
     message = "Game Draw!";
   } else {
-    message = `${NAMES[currentPlayer]} turn!`;
+    message = `${NAMES[currentPlayer]} to play`;
   }
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+    <div className="app">
       <h1>Connect Four</h1>
-      <h2>{message}</h2>
+
+      <div className={gameOver ? "status status--won" : "status"} role="status" aria-live="polite">
+        {!gameOver && (
+          <span
+            className={currentPlayer === 1 ? "turn-dot slot--blue" : "turn-dot slot--red"}
+            aria-hidden="true"
+          />
+        )}
+        <h2>{message}</h2>
+      </div>
+
       <BoardComp
         board={board}
         winningCells={result?.winning_cells ?? []}
+        lastMove={lastMove}
+        turn={currentPlayer}
         disabled={busy || gameOver}
+        hoverCol={hoverCol}
+        onHoverColumn={setHoverCol}
         onColumnClick={handleColumnClick}
       />
-      {error && <p style={{ color: "red" }}>{error}</p>}
-      <button onClick={reset}>Reset</button>
+
+      <p className="muted" aria-live="polite">{busy ? "Checking move…" : ""}</p>
+      {error && <p className="error" role="alert">{error}</p>}
+
+      <div className="controls">
+        <button onClick={reset}>{gameOver ? "Play again" : "Reset"}</button>
+      </div>
     </div>
   );
 }

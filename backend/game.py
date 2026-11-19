@@ -4,7 +4,7 @@ Nothing in this module knows about HTTP. The route layer in main.py turns
 InvalidBoard into a 400 response.
 """
 
-from typing import Any
+from schemas import GameState
 
 ROWS = 6
 COLS = 7
@@ -66,13 +66,12 @@ def find_winning_lines(board: list[list[int]]) -> dict[int, list[list[tuple[int,
     return lines
 
 
-def winning_cells(lines: list[list[tuple[int, int]]]) -> list[list[int]]:
+def winning_cells(lines: list[list[tuple[int, int]]]) -> list[tuple[int, int]]:
     """Every cell that is part of any winning line, in reading order."""
-    cells = {cell for line in lines for cell in line}
-    return [[r, c] for r, c in sorted(cells)]
+    return sorted({cell for line in lines for cell in line})
 
 
-def evaluate_board(board: list[list[int]]) -> dict[str, Any]:
+def evaluate_board(board: list[list[int]]) -> GameState:
     """Validate a board and describe its state. Raises InvalidBoard if it breaks the rules."""
     validate_board(board)
 
@@ -91,27 +90,17 @@ def evaluate_board(board: list[list[int]]) -> dict[str, Any]:
 
     if lines:
         winner, winner_lines = next(iter(lines.items()))
-        return {
-            "valid": True,
-            "status": "win",
-            "current_player": None,
-            "winner": winner,
-            "winning_cells": winning_cells(winner_lines),
-        }
+        return GameState(
+            status="win",
+            current_player=None,
+            winner=winner,
+            winning_cells=winning_cells(winner_lines),
+        )
 
     if all(cell != EMPTY for row in board for cell in row):
-        return {
-            "valid": True,
-            "status": "draw",
-            "current_player": None,
-            "winner": None,
-            "winning_cells": [],
-        }
+        return GameState(status="draw", current_player=None)
 
-    return {
-        "valid": True,
-        "status": "in_progress",
-        "current_player": BLUE if blue == red else RED,
-        "winner": None,
-        "winning_cells": [],
-    }
+    return GameState(
+        status="in_progress",
+        current_player=BLUE if blue == red else RED,
+    )

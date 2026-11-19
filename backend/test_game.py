@@ -17,11 +17,11 @@ def test_every_winning_line_is_highlighted() -> None:
     assert len(lines[1]) == 2
 
     assert winning_cells(lines[1]) == [
-        [2, 0],
-        [3, 0],
-        [4, 0],
-        [5, 0],
-        [5, 1],
-        [5, 2],
-        [5, 3],
+        (2, 0),
+        (3, 0),
+        (4, 0),
+        (5, 0),
+        (5, 1),
+        (5, 2),
+        (5, 3),
     ]

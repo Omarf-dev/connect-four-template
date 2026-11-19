@@ -170,6 +170,15 @@ def test_wrong_piece_counts_are_rejected() -> None:
     assert "piece counts" in response.json()["error"]
 
 
+def test_openapi_documents_the_response_models() -> None:
+    schema = client.get("/openapi.json").json()
+    game_state = schema["components"]["schemas"]["GameState"]["properties"]
+    assert game_state["status"]["enum"] == ["in_progress", "win", "draw"]
+    assert set(game_state) == {"valid", "status", "current_player", "winner", "winning_cells"}
+    assert "ErrorResponse" in schema["components"]["schemas"]
+    assert "400" in schema["paths"]["/evaluate_board_state"]["post"]["responses"]
+
+
 def test_malformed_body_is_rejected() -> None:
     response = client.post("/evaluate_board_state", json={"board": "nope"})
     assert response.status_code == 400

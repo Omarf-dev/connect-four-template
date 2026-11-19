@@ -12,6 +12,9 @@ node_modules/
 dist/
 *.tsbuildinfo
 coverage/
+test-results/
+playwright-report/
+blob-report/
 
 # Editors and OS
 .DS_Store

@@ -1,0 +1,151 @@
+:root {
+  --bg: #f1f5f9;
+  --fg: #0f172a;
+  --muted: #475569;
+  --board: #1e3a8a;
+  --slot-empty: #f8fafc;
+  --blue: #2563eb;
+  --red: #dc2626;
+  --gold: #facc15;
+  --error: #b91c1c;
+  --cell: clamp(34px, 10vw, 52px);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 24px 16px;
+}
+
+.app h1 {
+  margin: 0;
+  font-size: 2rem;
+}
+
+.status {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 2.4rem;
+}
+
+.status h2 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.status--won h2 {
+  color: var(--fg);
+}
+
+.turn-dot {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+}
+
+.board {
+  display: flex;
+  gap: 8px;
+  padding: 12px;
+  border-radius: 16px;
+  background: var(--board);
+  box-shadow: 0 10px 25px rgba(15, 23, 42, 0.25);
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 4px;
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+.column--off {
+  cursor: not-allowed;
+}
+
+.column:not(.column--off):hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.column:focus-visible {
+  outline: 3px solid var(--gold);
+  outline-offset: 2px;
+}
+
+.slot {
+  width: var(--cell);
+  height: var(--cell);
+  border-radius: 50%;
+  background: var(--slot-empty);
+  transition: background-color 0.15s ease, opacity 0.15s ease;
+}
+
+.slot--blue {
+  background: var(--blue);
+}
+
+.slot--red {
+  background: var(--red);
+}
+
+.slot--ghost {
+  opacity: 0.35;
+}
+
+.slot--last {
+  box-shadow: inset 0 0 0 4px rgba(255, 255, 255, 0.85);
+}
+
+.slot--win {
+  box-shadow: 0 0 0 4px var(--gold);
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.controls button {
+  padding: 8px 18px;
+  border: 0;
+  border-radius: 8px;
+  background: var(--fg);
+  color: var(--bg);
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.controls button:focus-visible {
+  outline: 3px solid var(--gold);
+  outline-offset: 2px;
+}
+
+.muted {
+  margin: 0;
+  color: var(--muted);
+  min-height: 1.2em;
+}
+
+.error {
+  margin: 0;
+  color: var(--error);
+  font-weight: 600;
+}
