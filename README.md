@@ -231,6 +231,29 @@ document instead.
   catching its mistakes)
 - [ ] thoughtful and self-aware suggestions for further work if given more time
 
+### What I changed in Stage 2, and why
+
+I used Claude Code to review the Stage 1 code, fix the problems it found, and improve the UI.
+Full details and the plan for what's next are in [NEXT_STEPS.md](NEXT_STEPS.md); the session
+transcript is in [ai-transcripts/](ai-transcripts/).
+
+- **Bugs fixed:** a full board with no winner crashed the server (it now reports a draw), and
+  impossible boards such as a red win on blue's turn were accepted (they are now rejected).
+- **Backend structure:** the rules moved into `backend/game.py`, separate from the routes in
+  `main.py`, and the responses are typed Pydantic models, so the API contract is in the OpenAPI
+  schema. Malformed requests now return the same error shape as rule violations.
+- **Frontend:** the API URL is relative and goes through the Vite proxy, instead of a hard-coded
+  address, so CORS is no longer needed. Errors from a crashed or unreachable server are shown
+  clearly, and a fast double-click or a reset during a request can no longer corrupt the game.
+- **UI:** a turn indicator, a preview of where the next chip lands, the last move marked, and
+  winning chips highlighted. The columns work with the keyboard and screen readers.
+- **Tests:** 19 backend tests (rules, every win direction, draws, impossible boards, validation,
+  API schema), 5 frontend unit tests, and 7 browser tests with Playwright. The browser tests
+  have not yet passed in my last run, because an older backend was still running; see
+  NEXT_STEPS.md.
+- **Setup:** frontend tests need Node 24 (the test runner crashes on Node 22.14), and the Python
+  dependencies are pinned to the versions I tested.
+
 ### Exporting AI transcripts
 
 We read your transcripts, so they must be human-readable: Markdown (`.md`) or plain text
